@@ -1,27 +1,22 @@
-package com.terry.springbootmall.model;
+package com.terry.springbootmall.dto;
 
 import com.terry.springbootmall.constant.ProductCategory;
+import org.springframework.lang.NonNull;
 
-import java.util.Date;
 
-public class Product {
-    private Integer productId;
+public class ProductRequest {
+
+    @NonNull
     private String productName;
+    @NonNull
     private ProductCategory category;
+    @NonNull
     private String imageUrl;
+    @NonNull
     private Integer price;
+    @NonNull
     private Integer stock;
     private String description;
-    private Date createdDate;  //Java Date格式預設使用英國格林威治時間
-    private Date lastModifiedDate;
-
-    public Integer getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Integer productId) {
-        this.productId = productId;
-    }
 
     public String getProductName() {
         return productName;
@@ -70,21 +65,4 @@ public class Product {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public Date getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(Date lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
-
 }
