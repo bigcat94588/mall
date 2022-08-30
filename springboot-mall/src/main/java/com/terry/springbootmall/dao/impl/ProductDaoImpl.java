@@ -1,5 +1,6 @@
 package com.terry.springbootmall.dao.impl;
 
+import com.terry.springbootmall.constant.ProductCategory;
 import com.terry.springbootmall.dao.ProductDao;
 import com.terry.springbootmall.dto.ProductRequest;
 import com.terry.springbootmall.model.Product;
@@ -23,16 +24,24 @@ public class ProductDaoImpl implements ProductDao {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
-    public List<Product> getProducts() {
+    public List<Product> getProducts(ProductCategory category,String search) {
         String sql = "SELECT product_id, product_name, category, image_url, price, stock, description, "+
-                "created_date, last_modified_date FROM product";
+                "created_date, last_modified_date FROM product WHERE 1 = 1";
 
         Map<String,Object> map = new HashMap<>();
 
+        if (category!=null){
+            sql = sql + " AND category=:category";
+            map.put("category",category.name()); //用name方法將Enum類型轉為字串
+        }
+        if (search!=null){
+            sql = sql + " AND product_name LIKE :search";
+            map.put("search","%" + search + "%"); //springboot模糊查詢要寫在map裡面，不能寫在sql語句裡面
+        }
+
         List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new ProductRowmapper());
 
-            return productList;  //RESTful設計理念，不去判斷是否有商品存在
-
+            return productList;  //RESTful設計理念，不去判斷是否有商品存
     }
 
     @Override
