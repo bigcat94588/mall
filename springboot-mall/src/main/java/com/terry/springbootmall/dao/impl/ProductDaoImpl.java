@@ -122,7 +122,7 @@ public class ProductDaoImpl implements ProductDao {
     @Override
     public void updateProduct(Integer productId, ProductRequest productRequest) {
         String sql = "UPDATE product SET product_name = :productName, category =:category, image_url = :imageUrl," +
-                "stock = :stock, description = :description,last_modified_date = :lastModifiedDate" +
+                "price=:price, stock = :stock, description = :description,last_modified_date = :lastModifiedDate" +
                 " WHERE product_id = :productId";
 
         Map<String, Object> map = new HashMap<>();

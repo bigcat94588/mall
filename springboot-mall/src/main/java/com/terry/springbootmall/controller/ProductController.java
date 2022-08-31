@@ -54,7 +54,7 @@ public class ProductController {
         page.setLimit(limit);
         page.setOffset(offset);
         page.setTotal(total);
-        page.setResult(productList);
+        page.setResults(productList);
 
         return ResponseEntity.status(HttpStatus.OK).body(page);  //RESTful設計理念，不去判斷是否有商品存在
     }
@@ -71,6 +71,7 @@ public class ProductController {
 
     @PostMapping("/products")
     public ResponseEntity<Product> createProduct(@RequestBody @Valid ProductRequest productRequest){
+
         Integer productId = productService.createProduct(productRequest);
 
         Product product = productService.getProductById(productId);
