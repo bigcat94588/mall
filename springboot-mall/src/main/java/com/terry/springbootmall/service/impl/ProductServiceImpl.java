@@ -1,6 +1,5 @@
 package com.terry.springbootmall.service.impl;
 
-import com.terry.springbootmall.constant.ProductCategory;
 import com.terry.springbootmall.dao.ProductDao;
 import com.terry.springbootmall.dto.ProductQueryParams;
 import com.terry.springbootmall.dto.ProductRequest;
@@ -15,6 +14,11 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductDao productDao;
+
+    @Override
+    public Integer coutProduct(ProductQueryParams productQueryParams) {
+        return  productDao.countProduct(productQueryParams);
+    }
 
     @Override
     public List<Product> getProducts(ProductQueryParams productQueryParams) {
