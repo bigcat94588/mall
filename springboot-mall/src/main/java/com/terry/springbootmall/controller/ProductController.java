@@ -1,6 +1,7 @@
 package com.terry.springbootmall.controller;
 
 import com.terry.springbootmall.constant.ProductCategory;
+import com.terry.springbootmall.dto.ProductQueryParams;
 import com.terry.springbootmall.dto.ProductRequest;
 import com.terry.springbootmall.model.Product;
 import com.terry.springbootmall.service.ProductService;
@@ -24,8 +25,11 @@ public class ProductController {
             @RequestParam(required = false) ProductCategory category,
             @RequestParam(required = false) String search
     ){
+        ProductQueryParams productQueryParams = new ProductQueryParams();
+        productQueryParams.setCategory(category);
+        productQueryParams.setSearch(search);
 
-        List<Product> productList = productService.getProducts(category,search);
+        List<Product> productList = productService.getProducts(productQueryParams);
 
         return ResponseEntity.status(HttpStatus.OK).body(productList);  //RESTful設計理念，不去判斷是否有商品存在
     }
