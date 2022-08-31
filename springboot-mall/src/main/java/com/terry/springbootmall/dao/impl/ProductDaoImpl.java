@@ -39,6 +39,7 @@ public class ProductDaoImpl implements ProductDao {
             sql = sql + " AND product_name LIKE :search";
             map.put("search","%" + productQueryParams.getSearch() + "%"); //springboot模糊查詢要寫在map裡面，不能寫在sql語句裡面
         }
+        sql = sql + " ORDER BY "+productQueryParams.getOrderBy() + " "+ productQueryParams.getSort();
 
         List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new ProductRowmapper());
 
