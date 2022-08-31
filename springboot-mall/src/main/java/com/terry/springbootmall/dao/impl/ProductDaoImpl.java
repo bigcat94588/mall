@@ -31,6 +31,7 @@ public class ProductDaoImpl implements ProductDao {
 
         Map<String,Object> map = new HashMap<>();
 
+        //查詢條件 Filtering
         if (productQueryParams.getCategory()!=null){
             sql = sql + " AND category=:category";
             map.put("category",productQueryParams.getCategory().name()); //用name方法將Enum類型轉為字串
@@ -39,7 +40,14 @@ public class ProductDaoImpl implements ProductDao {
             sql = sql + " AND product_name LIKE :search";
             map.put("search","%" + productQueryParams.getSearch() + "%"); //springboot模糊查詢要寫在map裡面，不能寫在sql語句裡面
         }
+
+        //排序 Sorting
         sql = sql + " ORDER BY "+productQueryParams.getOrderBy() + " "+ productQueryParams.getSort();
+
+        //分頁 Pagination
+        sql = sql + " LIMIT :limit OFFSET :offset";
+        map.put("limit",productQueryParams.getLimit());
+        map.put("offset",productQueryParams.getOffset());
 
         List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new ProductRowmapper());
 
