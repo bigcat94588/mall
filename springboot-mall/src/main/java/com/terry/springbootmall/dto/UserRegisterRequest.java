@@ -2,10 +2,14 @@ package com.terry.springbootmall.dto;
 
 import org.springframework.lang.NonNull;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 public class UserRegisterRequest {
-    @NonNull
+    @NotBlank
+    @Email
     private String email;
-    @NonNull
+    @NotBlank
     private String password;
 
     public String getEmail() { return email; }
