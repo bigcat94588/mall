@@ -5,7 +5,9 @@ import com.terry.springbootmall.dao.ProductDao;
 import com.terry.springbootmall.dto.ProductQueryParams;
 import com.terry.springbootmall.dto.ProductRequest;
 import com.terry.springbootmall.model.Product;
-import com.terry.springbootmall.rowmapper.ProductRowmapper;
+import com.terry.springbootmall.model.User;
+import com.terry.springbootmall.rowmapper.ProductRowMapper;
+import com.terry.springbootmall.rowmapper.UserRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -76,24 +78,28 @@ public class ProductDaoImpl implements ProductDao {
         map.put("limit", productQueryParams.getLimit());
         map.put("offset", productQueryParams.getOffset());
 
-        List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new ProductRowmapper());
+        List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new ProductRowMapper());
 
         return productList;  //RESTful設計理念，不去判斷是否有商品存
     }
 
     @Override
     public Product getProductById(Integer productId) {
-        String sql = "SELECT product_id, product_name, category, image_url, price, stock, description, " +
-                "created_date, last_modified_date FROM product WHERE product_id = :productId";
+        String sql = "SELECT product_id, product_name, category, image_url, price, stock, description, created_date," +
+                " last_modified_date FROM product WHERE product_id = :productId";
+
         Map<String, Object> map = new HashMap<>();
         map.put("productId", productId);
-        List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new ProductRowmapper());
+
+        List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new ProductRowMapper());
         if (productList.size() > 0) {
             return productList.get(0);
         } else {
             return null;
         }
+
     }
+
 
     @Override
     public Integer createProduct(ProductRequest productRequest) {
@@ -143,7 +149,7 @@ public class ProductDaoImpl implements ProductDao {
     public void deleteProductById(Integer productId) {
         String sql = "DELETE FROM product WHERE product_id = :productId";
         Map<String, Object> map = new HashMap<>();
-        map.put("productId", productId);
+        map.put("product_Id", productId);
 
         namedParameterJdbcTemplate.update(sql, map);
     }
