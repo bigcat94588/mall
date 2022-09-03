@@ -5,6 +5,7 @@ import com.terry.springbootmall.dao.ProductDao;
 import com.terry.springbootmall.dao.UserDao;
 import com.terry.springbootmall.dto.BuyItem;
 import com.terry.springbootmall.dto.CreateOrderRequest;
+import com.terry.springbootmall.dto.OrderQueryParams;
 import com.terry.springbootmall.model.Order;
 import com.terry.springbootmall.model.OrderItem;
 import com.terry.springbootmall.model.Product;
@@ -32,6 +33,28 @@ public class OrderServiceImpl implements OrderService {
     private UserDao userDao;
 
     private final static Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
+
+
+    @Override
+    public Integer countOrder(OrderQueryParams orderQueryParams) {
+        return orderDao.countOrder(orderQueryParams);
+    }
+
+    @Override
+    public List<Order> getOrders(OrderQueryParams orderQueryParams) {
+
+        List<Order> orderList = orderDao.getOrders(orderQueryParams);
+
+        for (Order order: orderList){
+
+            List<OrderItem> orderItemList = orderDao.getOrderItemsByOrderId(order.getOrderId());
+
+            order.setOrderItemList(orderItemList);
+        }
+
+        return orderList;
+
+    }
 
     @Override
     public Order getOrderById(Integer orderId) {
@@ -67,7 +90,7 @@ public class OrderServiceImpl implements OrderService {
             Product product = productDao.getProductById(buyItem.getProductId());
             //檢查product是否存在?庫存是否足夠
             if (product== null){
-                log.warn("商品 {} 不存在,buyItem.getProdcutId()");
+                log.warn("商品 {} 不存在",buyItem.getProductId());
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             }else if (product.getStock() < buyItem.getQuantity()){
                 log.warn("商品 {} 庫存數量不足,無法購買。剩餘庫存{}。欲購買數量{}",
